@@ -1,3 +1,4 @@
 .venv
 *.ics
 .env
+__pycache__

@@ -1,3 +1,4 @@
 ics
 requests
 arrow
+"fastapi[standard]"
