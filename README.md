@@ -1,5 +1,5 @@
 # Dees Calendar
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)]
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 ![GitHub branch check runs](https://img.shields.io/github/check-runs/ewandank/dees_calendar/main)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ewandank/dees_calendar)
 
