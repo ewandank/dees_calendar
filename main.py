@@ -17,8 +17,10 @@ session = CachedSession(
     "squiggle_cache", backend="sqlite", expire_after=timedelta(hours=8)
 )
 
+
 class CalendarResponse(Response):
     media_type = "text/calendar"
+
 
 @app.get("/fixture.ics", response_class=CalendarResponse)
 def get_calendar():
@@ -31,8 +33,13 @@ def get_calendar():
     )
     # get games from squiggle api.
     url = "https://api.squiggle.com.au/"
-    # the current behaviour will load the new games on jan 1st.
-    payload = {"q": "games", "year": arrow.now().format("YYYY"), "team": team_id}
+
+    # This might want to be rethought to either not include a year,so it doesn't remove the previous year.
+    # This could also consider that the season is typically contained from March - September, 
+    # as the current behaviour will get the new year on 1st January
+    year = arrow.now().format("YYYY")
+    payload = {"q": "games", "year": year, "team": team_id}
+
     headers = {"User-Agent": "Demons Calendar - github.com/ewandank"}
     response = session.get(url, params=payload, headers=headers)
     games = response.json()["games"]
