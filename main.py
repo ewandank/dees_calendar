@@ -34,12 +34,7 @@ def write_cal():
         e.uid = str(game["id"])
 
         c.events.add(e)
-    # really need to make this better to test
-    with open("/usr/share/nginx/html/fixture.ics", "w") as f:
-        f.writelines(c.serialize_iter())
-        print("Written fixture to file successfully")
 
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+# Serve the web directory on the `/` route.
+# This is intentionally after the endpoint or it encompasses it.
+app.mount("/", StaticFiles(directory="web", html=True), name="web")
