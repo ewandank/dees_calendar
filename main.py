@@ -1,25 +1,40 @@
 from ics import Calendar, Event
-import requests
-import arrow
-from os import environ
 from ics.grammar.parse import ContentLine
-from fastapi import FastAPI
+import requests
+from requests_cache import CachedSession
+import arrow
+from datetime import timedelta
+from fastapi import FastAPI, Request, Response
+from fastapi.staticfiles import StaticFiles
 
-app = FastAPI()
+app = FastAPI(docs_url=None, redoc_url=None)
 
-# Not supporting other teams, feature not a bug
-# Constants??
+# Only supporting the Demons. This is a feature of this app.
 team_id = 11
-c = Calendar(creator="Ewan Dank github.com/ewandank")
-c.extra.extend([ContentLine(name="X-WR-CALNAME", value="Melbourne Demons"), ContentLine(name="NAME", value="Melbourne Demons")])
 
+# Cache the requests to the squiggle api
+session = CachedSession(
+    "squiggle_cache", backend="sqlite", expire_after=timedelta(hours=8)
+)
 
-def write_cal():
-    # get games from squiggle api
-    url = "https://api.squiggle.com.au/?q=games"
-    payload = {"year": arrow.now().format("YYYY"), "team": team_id}
-    headers = {"User-Agent": environ["EMAIL"], "From": environ["NAME"]}
-    response = requests.get(url, params=payload, headers=headers)
+class CalendarResponse(Response):
+    media_type = "text/calendar"
+
+@app.get("/fixture.ics", response_class=CalendarResponse)
+def get_calendar():
+    c = Calendar(creator="Ewan Dank (github.com/ewandank)")
+    c.extra.extend(
+        [
+            ContentLine(name="X-WR-CALNAME", value="Melbourne Demons"),
+            ContentLine(name="NAME", value="Melbourne Demons"),
+        ]
+    )
+    # get games from squiggle api.
+    url = "https://api.squiggle.com.au/"
+    # the current behaviour will load the new games on jan 1st.
+    payload = {"q": "games", "year": arrow.now().format("YYYY"), "team": team_id}
+    headers = {"User-Agent": "Demons Calendar - github.com/ewandank"}
+    response = session.get(url, params=payload, headers=headers)
     games = response.json()["games"]
     for game in games:
         e = Event()
@@ -34,7 +49,9 @@ def write_cal():
         e.uid = str(game["id"])
 
         c.events.add(e)
+    return c.serialize()
+
 
 # Serve the web directory on the `/` route.
-# This is intentionally after the endpoint or it encompasses it.
+# Serve static files from the `web` directory. This is intentionally after the endpoint or it encompasses it.
 app.mount("/", StaticFiles(directory="web", html=True), name="web")

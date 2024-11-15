@@ -2,3 +2,4 @@
 *.ics
 .env
 __pycache__
+squiggle_cache.sqlite
