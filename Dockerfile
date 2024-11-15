@@ -13,4 +13,4 @@ RUN uv sync --frozen --no-cache
 
 # Run PROD FastAPI.
 EXPOSE 80
-CMD ["/app/.venv/bin/fastapi", "run", "app/main.py", "--port", "80"]
+CMD ["/app/.venv/bin/fastapi", "run", "main.py", "--port", "80"]
