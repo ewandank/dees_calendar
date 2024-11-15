@@ -1,13 +1,16 @@
 FROM python:3.12-alpine
 LABEL org.opencontainers.image.source=https://github.com/ewandank/dees_calendar
+# Install uv.
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Copy the application into the container. 
+COPY . /app
+
+
 WORKDIR /app
+# Install deps.
+RUN uv sync --frozen --no-cache
 
-COPY requirements.txt /app/
-COPY main.py /app/
-COPY web /app/web
-ADD web /app/web
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
-RUN rm /app/requirements.txt
-
+# Run PROD FastAPI.
 EXPOSE 80
-CMD ["fastapi", "run", "main.py", "--port", "80"]
+CMD ["/app/.venv/bin/fastapi", "run", "app/main.py", "--port", "80"]
