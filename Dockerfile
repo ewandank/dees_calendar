@@ -1,5 +1,5 @@
 FROM python:3.12-alpine
-
+LABEL org.opencontainers.image.source=https://github.com/ewandank/dees_calendar
 WORKDIR /app
 
 COPY requirements.txt /app/
