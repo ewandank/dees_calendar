@@ -1,10 +1,9 @@
 from ics import Calendar, Event
 from ics.grammar.parse import ContentLine
-import requests
 from requests_cache import CachedSession
 import arrow
 from datetime import timedelta
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(docs_url=None, redoc_url=None)
@@ -29,8 +28,9 @@ def get_calendar():
         [
             ContentLine(name="X-WR-CALNAME", value="Melbourne Demons"),
             ContentLine(name="NAME", value="Melbourne Demons"),
-            ContentLine(name="NAME", value="Melbourne Demons"),
-
+            # Refresh Every 4 hours, As the cache could have changed. 
+            ContentLine(name="REFRESH-INTERVAL;VALUE=DURATION", value="PT4H"),
+            ContentLine(name="X-PUBLISHED-TTL", value="14400"),
         ]
     )
     # get games from squiggle api.
@@ -42,7 +42,7 @@ def get_calendar():
     year = arrow.now().format("YYYY")
 
     # See https://api.squiggle.com.au/#section_bots
-    headers = {"User-Agent": "Demons Calendar - github.com/ewandank"}
+    headers = {"User-Agent": "Demons Calendar - https://github.com/ewandank/dees_calendar"}
 
     response = session.get(
         url, params={"q": "games", "year": year, "team": team_id}, headers=headers
