@@ -36,10 +36,14 @@ def get_calendar():
     # get games from squiggle api.
     url = "https://api.squiggle.com.au/"
 
-    # This might want to be rethought to either not include a year,so it doesn't remove the previous year.
-    # This could also consider that the season is typically contained from March - September,
-    # as the current behaviour will get the new year on 1st January.
-    year = arrow.now().format("YYYY")
+    today = arrow.now()
+
+    # If we are in november, we likely want next years fixture, not this years one.
+    year = (
+        today.format("YYYY")
+        if today.date().month < 11
+        else today.shift(years=1).format("YYYY")
+    )
 
     # See https://api.squiggle.com.au/#section_bots
     headers = {
