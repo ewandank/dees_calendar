@@ -1,24 +1,24 @@
 name: Ruff
-on: [ push, pull_request ]
+on: [push, pull_request]
 jobs:
-    ruff:
-        runs-on: ubuntu-latest
-        steps:
-              - name: "Checkout"
-                uses: actions/checkout@v4
-              - name: "Lint"
-                uses: astral-sh/ruff-action@v1
-                with: 
-                  args: check --output-format=github
-              - name: "Format"
-                uses: astral-sh/ruff-action@v1
-                with:
-                  args: format --diff
-    docker-build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Build and push docker image
-              uses: docker/build-push-action@v4
-              with:
-                push: ${{ github.ref == 'refs/heads/main' }}
-                tags:  ghcr.io/ewandank/dees_calendar:latest
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Lint"
+        uses: astral-sh/ruff-action@v1
+        with:
+          args: check --output-format=github
+      - name: "Format"
+        uses: astral-sh/ruff-action@v1
+        with:
+          args: format --diff
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and push docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/ewandank/dees_calendar:latest

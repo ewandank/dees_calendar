@@ -1,4 +1,5 @@
 # Dees Calendar
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 
 A `FastAPI` application that that scrapes the [squiggle api](https://api.squiggle.com.au/) approximately every 8 hours for the Melbourne Demons and parses it into iCal Format.
 
@@ -8,6 +9,15 @@ This project is built with [`uv`](https://docs.astral.sh/uv/). The `FastAPI` Dev
 
 ```bash
 uv run fastapi dev
+```
+
+`Ruff` is used for formatting and linting.
+
+```bash
+# To lint
+ruff check
+# To format 
+ruff format
 ```
 
 ## Build and Deployment
