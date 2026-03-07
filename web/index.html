@@ -11,7 +11,7 @@
                     "webcal://godees.ewandank.dev/fixture.ics",
                 );
                 // Is this tacky? How else do copy buttoms give feedback?
-                document.getElementById("copy_button").innerHTML =
+                document.getElementsByClassName("second-btn")[0].innerHTML =
                     "URL Copied!";
             };
         </script>
@@ -43,6 +43,8 @@
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 496 512"
+                        role="graphics-symbol"
+                        aria-label="dees_calendar Github"
                     >
                         <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                         <path

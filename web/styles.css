@@ -5,6 +5,10 @@
     --neutral-400: oklch(70.8% 0 0);
     --neutral-500: oklch(55.6% 0 0);
     --neutral-800: oklch(26.9% 0 0);
+
+    --bg-body: light-dark(var(--neutral-100), var(--neutral-800));
+    --text-muted: light-dark(var(--neutral-500), var(--neutral-400));
+    --ring-color: var(--neutral-400);
     color-scheme: light dark;
 }
 /* a sane css reset */
@@ -22,7 +26,7 @@ html {
     -moz-text-size-adjust: none;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
-    background-color: light-dark(var(--neutral-100), var(--neutral-800));
+    background-color: var(--bg-body);
     height: 100%;
 }
 body {
@@ -74,10 +78,6 @@ a {
     width: 80rem;
     max-width: 95%;
     min-width: 0;
-    &:focus-visible {
-        border-color: hsl(var(--neutral-400));
-        box-shadow: 0 0 0 3px hsl(var(--neutral-400) / 0.5);
-    }
 }
 
 .first-btn {
@@ -94,7 +94,6 @@ a {
     }
 }
 
-/* Hover & Focus States */
 .btn:hover {
     background-color: hsl(var(--primary) / 0.8);
 }
@@ -116,7 +115,7 @@ hr {
     width: 80rem;
     max-width: 95%;
     border: none;
-    background-color: pink;
+    background-color: var(--ring-color);
 }
 .footer-content {
     width: 80rem;
@@ -125,7 +124,7 @@ hr {
     padding-top: 0.5rem;
 }
 .footer-warning {
-    color: light-dark(var(--muted-foreground), var(--dark-muted-foreground));
+    color: var(--text-muted);
     width: 65%;
 }
 .logos {
@@ -137,5 +136,5 @@ hr {
     height: 2.4em;
     width: 2.4em;
     flex-shrink: 0;
-    color: light-dark(var(--muted-foreground), var(--dark-muted-foreground));
+    color: var(--text-muted);
 }
