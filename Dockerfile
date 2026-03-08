@@ -8,8 +8,11 @@ COPY . /app
 
 
 WORKDIR /app
-# Install deps.
-RUN uv sync --frozen --no-cache
+# Install build deps needed to compile packages without pre-built wheels for Python 3.14,
+# then remove them to keep the image small.
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
+    && uv sync --frozen --no-cache \
+    && apk del .build-deps
 
 # Run PROD FastAPI.
 EXPOSE 80
