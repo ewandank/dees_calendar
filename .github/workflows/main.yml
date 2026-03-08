@@ -16,11 +16,11 @@ jobs:
       - name: "Checkout Repo"
         uses: actions/checkout@v6
       - name: "Lint"
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           args: check --output-format=github
       - name: "Format"
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           args: format --diff
   docker-build:
