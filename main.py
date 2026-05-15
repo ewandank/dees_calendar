@@ -3,8 +3,6 @@ from ics.grammar.parse import ContentLine
 from requests_cache import CachedSession
 import arrow
 from datetime import timedelta
-from fastapi import FastAPI, Response
-from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(docs_url=None, redoc_url=None)
 
@@ -39,7 +37,14 @@ def get_season_id(comp_id: int):
         f"{ROOT_URL}/competitions/{comp_id}/compseasons?pageSize=100"
     ).json()["compSeasons"]
     for season in seasons:
-        if str(arrow.now().year) in season["name"]:
+        # If we are in November, we likely want next years fixture, not this years one.
+        today = arrow.now()
+        year = (
+            today.format("YYYY")
+            if today.date().month < 11
+            else today.shift(years=1).format("YYYY")
+        )
+        if str(year) in season["name"]:
             return season["id"]
 
 
@@ -65,26 +70,28 @@ def get_calendar():
         params={
             "competitionId": comp_id,
             "compSeasonId": season_id,
+            # I think it only returns the number of games in a season anyway lol.
             "pageSize": 1000,
             "teamId": TEAM_ID,
         },
     ).json()["matches"]
 
     for match in matches:
+        if match["status"] == "PLACEHOLDER":
+            # If the time is undecided, don't put it in the calendar.
+            continue
+
         e = Event()
         if match["home"]["team"]["id"] == TEAM_ID:
-            e.name = (
-                f"{match['home']['team']['name']} vs {match['away']['team']['name']}"
-            )
+            # [team][name] changes during Doug Nicholls Round e.g from Melbourne to Naarm
+            # Whilst not opposed to that it creates a lot of changes, and can't programatically only do it for the rounds I want to, without creating uneccessary updates.
+            e.name = f"{match['home']['team']['club']['name']} vs {match['away']['team']['club']['name']}"
         else:
-            e.name = (
-                f"{match['away']['team']['name']} vs {match['home']['team']['name']}"
-            )
+            e.name = f"{match['away']['team']['club']['name']} vs {match['home']['team']['club']['name']}"
 
         e.location = match["venue"]["name"]
         e.begin = arrow.get(match["utcStartTime"])
         e.end = e.begin.shift(hours=3)
-        e.created = arrow.get("2024-01-01T00:00:00Z")
         e.uid = str(match["id"])
         c.events.add(e)
     return c.serialize()
