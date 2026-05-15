@@ -1,8 +1,11 @@
+from datetime import timedelta
+
+import arrow
+from fastapi import FastAPI, Response
+from fastapi.staticfiles import StaticFiles
 from ics import Calendar, Event
 from ics.grammar.parse import ContentLine
 from requests_cache import CachedSession
-import arrow
-from datetime import timedelta
 
 app = FastAPI(docs_url=None, redoc_url=None)
 
