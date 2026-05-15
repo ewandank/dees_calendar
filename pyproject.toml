@@ -14,4 +14,8 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ruff>=0.7.3",
+    "ty>=0.0.36",
 ]
+
+[tool.ty.rules]
+all = "error"
