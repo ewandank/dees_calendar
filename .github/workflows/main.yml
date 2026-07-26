@@ -10,7 +10,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 jobs:
-  ruff:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Repo"
@@ -23,6 +23,10 @@ jobs:
         uses: astral-sh/ruff-action@0ce1b0bf8b818ef400413f810f8a11cdbda0034b # v4.0.0
         with:
           args: format --diff
+      - name: "Setup uv for ty"
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      - name: "Run ty"
+        run: "uv run ty check --output-format=github"
   docker-build:
     permissions:
       contents: read
