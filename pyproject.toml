@@ -13,8 +13,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ruff>=0.7.3",
-    "ty>=0.0.36",
+    "ruff>=0.16.0",
+    "ty>=0.0.63",
 ]
 
 [tool.ty.rules]
